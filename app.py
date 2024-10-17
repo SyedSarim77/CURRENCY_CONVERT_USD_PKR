@@ -10,25 +10,45 @@ st.set_page_config(page_title="Currency Converter", page_icon="💱")
 st.markdown(
     """
     <style>
-    .main {
-        background-color: #f7f7f7;
-        color: #333;
+    body {
+        background-color: #e9ecef;
     }
     h1 {
         font-family: 'Arial', sans-serif;
         font-size: 2.5em;
-        color: #4CAF50;
+        color: #007bff;
+        text-align: center;
+        margin-bottom: 20px;
     }
     .stButton>button {
-        background-color: #4CAF50;
+        background-color: #007bff;
         color: white;
         font-size: 16px;
-        padding: 10px;
+        padding: 10px 20px;
         border: None;
         border-radius: 5px;
+        transition: background-color 0.3s;
     }
     .stButton>button:hover {
-        background-color: #45a049;
+        background-color: #0056b3;
+    }
+    .converter-container {
+        display: flex;
+        justify-content: center;
+        margin: 20px;
+    }
+    .input-box {
+        margin: 10px;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .result {
+        margin-top: 20px;
+        font-size: 1.5em;
+        text-align: center;
+        color: #28a745;
     }
     </style>
     """,
@@ -39,23 +59,27 @@ st.title("Currency Converter 💱")
 
 # Add a brief description
 st.markdown("""
-This app converts between USD and PKR. Select the conversion type, enter the amount, and click "Convert" to see the result!
+Convert between USD and PKR. Select the conversion type, enter the amount, and click "Convert" to see the result!
 """)
 
-# Create two options for conversion
-conversion_type = st.selectbox("Select conversion type:", ("USD to PKR", "PKR to USD"))
+# Create a container for the input boxes
+with st.container():
+    conversion_type = st.selectbox("Select conversion type:", ("USD to PKR", "PKR to USD"))
 
-if conversion_type == "USD to PKR":
-    usd_amount = st.number_input("Enter amount in USD:", min_value=0.0, step=0.01)
-    if st.button("Convert"):
-        pkr_amount = usd_amount * exchange_rate
-        st.success(f"{usd_amount:.2f} USD is equal to {pkr_amount:.2f} PKR")
+    # Create input boxes based on conversion type
+    if conversion_type == "USD to PKR":
+        with st.container():
+            usd_amount = st.number_input("Enter amount in USD:", min_value=0.0, step=0.01, format="%.2f", key="usd")
+            if st.button("Convert to PKR", key="convert_usd_to_pkr"):
+                pkr_amount = usd_amount * exchange_rate
+                st.markdown(f"<div class='result'>{usd_amount:.2f} USD = {pkr_amount:.2f} PKR</div>", unsafe_allow_html=True)
 
-elif conversion_type == "PKR to USD":
-    pkr_amount = st.number_input("Enter amount in PKR:", min_value=0.0, step=0.01)
-    if st.button("Convert"):
-        usd_amount = pkr_amount / exchange_rate
-        st.success(f"{pkr_amount:.2f} PKR is equal to {usd_amount:.2f} USD")
+    elif conversion_type == "PKR to USD":
+        with st.container():
+            pkr_amount = st.number_input("Enter amount in PKR:", min_value=0.0, step=0.01, format="%.2f", key="pkr")
+            if st.button("Convert to USD", key="convert_pkr_to_usd"):
+                usd_amount = pkr_amount / exchange_rate
+                st.markdown(f"<div class='result'>{pkr_amount:.2f} PKR = {usd_amount:.2f} USD</div>", unsafe_allow_html=True)
 
 # Add a footer
 st.markdown("""
