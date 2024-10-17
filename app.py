@@ -60,5 +60,5 @@ elif conversion_type == "PKR to USD":
 # Add a footer
 st.markdown("""
 ---
-*Developed with ❤️ by [Your Name].*
+*Developed with ❤️ by [SYED SARIM].*
 """)
